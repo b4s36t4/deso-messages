@@ -4,6 +4,7 @@ import {
   GetSingleProfileResponse,
   GetFollowsResponse,
   GetProfilesResponse,
+  GetNotificationsCountResponse,
 } from "deso-protocol-types/src/lib/deso-types";
 import { GetDecryptMessagesResponse } from "deso-protocol-types/src/lib/deso-types-custom";
 interface Context {
@@ -14,6 +15,7 @@ interface Context {
   getUserMessages: (publicKey: string) => Promise<GetDecryptMessagesResponse[]>;
   searchUsers: (usernane: string) => Promise<GetProfilesResponse>;
   loading: boolean;
+  getNotificationCount: () => Promise<GetNotificationsCountResponse>;
 }
 const DesoContext = React.createContext<Context | null>(null);
 
@@ -80,9 +82,9 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
   const sendMessage = async (to: string, msg: string) => {
     toggleLoading();
     const res = await deso.social.sendMessage({
-      SenderPublicKeyBase58Check: currentUser,
+      MessageText: msg,
       RecipientPublicKeyBase58Check: to,
-      EncryptedMessageText: msg,
+      SenderPublicKeyBase58Check: currentUser,
     });
     toggleLoading();
     return res;
@@ -91,14 +93,14 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
   const getUserMessages = async (publicKey: string) => {
     toggleLoading();
     const res = await deso.social.getMessagesStateless({
-      PublicKeyBase58Check: publicKey,
-      NumToFetch: 100,
+      NumToFetch: 25,
+      PublicKeyBase58Check: currentUser,
       FetchAfterPublicKeyBase58Check: "",
-      FollowingOnly: true,
-      SortAlgorithm: "time",
-      FollowersOnly: false,
       HoldersOnly: false,
+      FollowersOnly: false,
+      FollowingOnly: false,
       HoldingsOnly: false,
+      SortAlgorithm: "time",
     });
     toggleLoading();
     return res;
@@ -113,6 +115,14 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
     toggleLoading();
     return res;
   };
+  const getNotificationCount = async () => {
+    toggleLoading();
+    const res = await deso.notification.getUnreadNotificationsCount({
+      PublicKeyBase58Check: currentUser,
+    });
+    toggleLoading();
+    return res;
+  };
   const value = {
     getAUser,
     getMyFollowers,
@@ -121,6 +131,7 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
     getUserMessages,
     searchUsers,
     loading,
+    getNotificationCount,
   };
 
   return <DesoContext.Provider value={value}>{children}</DesoContext.Provider>;

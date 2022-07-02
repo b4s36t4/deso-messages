@@ -65,9 +65,9 @@ const MainNavigator = () => {
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {appContext.loggedIn ? (
-          <Stack.Screen component={HomeWrapper} name={"Auth"} />
+          <Stack.Screen component={HomeWrapper} name={"Home"} />
         ) : (
-          <Stack.Screen component={Landing} name={"Home"} />
+          <Stack.Screen component={Landing} name={"Landing"} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
