@@ -1,9 +1,16 @@
-import Deso from "deso-protocol";
+import Deso, { DesoConfig } from "deso-protocol";
 import React, { useEffect, useState } from "react";
 import { IS_LOGGED_IN } from "../const";
 import { getBooleanItem } from "../utils/storage";
 
 const deso = new Deso();
+
+declare global {
+  interface Window {
+    deso: Deso;
+  }
+}
+
 interface Context {
   loggedIn: boolean;
   deso: Deso;
