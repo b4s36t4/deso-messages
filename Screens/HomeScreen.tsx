@@ -107,7 +107,6 @@ const HomeScreen = () => {
     const user = await searchUsers(searchText);
     setSearchUsers(user);
     setIsLoading(false);
-  };
 
   useEffect(() => {
     handleSearch();

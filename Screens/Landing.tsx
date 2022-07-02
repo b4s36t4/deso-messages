@@ -15,7 +15,21 @@ import { useAppContext } from "../context/appContext";
 const HomeScreen = () => {
   const { deso } = useAppContext();
   const SignUpUser = async () => {
-    const res = await deso.identity.login("4");
+    await deso.identity.login("2");
+    const request = {
+      PublicKeyBase58Check: deso.identity.getUserKey() || "",
+      jwt: (await deso.identity.getJwt()) || "",
+    };
+    const response = await deso.user.getUserMetadata(request);
+    if (!response.HasPhoneNumber) {
+      window.open(
+        `https://identity.deso.org/log-in?accessLevelRequest=2&getFreeDeso=true`,
+        undefined,
+        "toolbar=no, width=800, height=1000, top=0, left=0"
+      );
+    } else {
+      window.localStorage.setItem("HasPhoneNumber", "true");
+    }
   };
   return (
     <View flexDirection={"row"} width={"100%"} bg={"white"} height={"100%"}>
