@@ -1,13 +1,15 @@
 import {
   Avatar,
+  Button,
   Heading,
   Input,
   Pressable,
+  ScrollView,
   Text,
   Tooltip,
   View,
 } from "native-base";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import AntIcon from "@expo/vector-icons/AntDesign";
 import { useDeso } from "../context/desoContext";
 import {
@@ -40,7 +42,7 @@ const HomeScreen = () => {
   );
   const [msgText, setMsgText] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
-
+  const [msgLoading, setMsgLoading] = useState(false);
   const toggleSearchBar = () => {
     setShowSearchBar(!showSearchBar);
   };
@@ -56,12 +58,14 @@ const HomeScreen = () => {
     const req = {
       PublicKeyBase58Check: publicKey,
     };
-    const res = deso.user.getSingleProfile(req);
-    console.log(res, "Res");
   }, []);
 
-  const onPressSend = () => {
-    sendMessage(openedUser?.PublicKeyBase58Check || "", msgText);
+  const onPressSend = async () => {
+    if (msgLoading) return;
+    setMsgLoading(true);
+    await sendMessage(openedUser?.PublicKeyBase58Check || "", msgText);
+    setMsgText("");
+    setMsgLoading(false);
   };
 
   const onPressonUser = (user: ProfileEntryResponse) => {
@@ -74,13 +78,66 @@ const HomeScreen = () => {
       const userMessages = await getUserMessages(
         openedUser.PublicKeyBase58Check
       );
-      console.log(userMessages);
       const decrypted = await deso.identity.decrypt(userMessages);
       if (!decrypted) return;
       setMessages(decrypted);
     };
-    func();
+    setInterval(() => {
+      func();
+    }, 1000);
   }, [openedUser]);
+
+  const renderMessages = useMemo(() => {
+    return (
+      <View
+        style={{ borderWidth: 2 }}
+        borderColor={"primary.100"}
+        borderTopRightRadius={"10"}
+        borderBottomLeftRadius={"10"}
+        height={"75%"}
+        marginTop={"24px"}
+        width={"100%"}
+        display={"flex"}
+        justifyContent={"flex-end"}
+      >
+        {Array.isArray(messages) && messages.length > 0 && (
+          <ScrollView
+            display="flex"
+            flexDirection={"column-reverse"}
+            // justifyContent={"flex-end"}
+            overflow={"scroll"}
+            contentContainerStyle={{ justifyContent: "flex-end" }}
+          >
+            {messages.map((message) => {
+              return (
+                (message.SenderMessagingPublicKey ===
+                  openedUser?.PublicKeyBase58Check ||
+                  message.RecipientMessagingPublicKey ===
+                    openedUser?.PublicKeyBase58Check) && (
+                  <View
+                    my={"10px"}
+                    ml={"10px"}
+                    mr={"10px"}
+                    borderRadius={10}
+                    key={message.EncryptedHex}
+                    alignSelf={message.IsSender ? "flex-end" : "flex-start"}
+                    width={"50%"}
+                    bg={message.IsSender ? "secondary.100" : "primary.200"}
+                    py={"10px"}
+                    px={"15px"}
+                  >
+                    <Text fontSize={"20px"} color={"black"}>
+                      {message.DecryptedMessage}
+                    </Text>
+                  </View>
+                )
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
+    );
+  }, [messages]);
 
   return (
     <View
@@ -206,49 +263,7 @@ const HomeScreen = () => {
                 </View>
               </View>
             </View>
-            <View
-              style={{ borderWidth: 2 }}
-              borderColor={"primary.100"}
-              borderTopRightRadius={"10"}
-              borderBottomLeftRadius={"10"}
-              height={"75%"}
-              marginTop={"24px"}
-              width={"100%"}
-              display={"flex"}
-              justifyContent={"flex-end"}
-            >
-              {Array.isArray(messages) && messages.length > 0 && (
-                <View
-                  display="flex"
-                  flexDirection={"column-reverse"}
-                  justifyContent={"flex-end"}
-                  maxHeight={"500px"}
-                  overflow={"scroll"}
-                >
-                  {messages.map((message) => {
-                    console.log(message);
-                    return (
-                      <View
-                        my={"10px"}
-                        ml={"10px"}
-                        mr={"10px"}
-                        borderRadius={10}
-                        key={message.EncryptedHex}
-                        alignSelf={message.IsSender ? "flex-end" : "flex-start"}
-                        width={"50%"}
-                        bg={message.IsSender ? "secondary.100" : "primary.200"}
-                        py={"10px"}
-                        px={"15px"}
-                      >
-                        <Text fontSize={"20px"} color={"black"}>
-                          {message.DecryptedMessage}
-                        </Text>
-                      </View>
-                    );
-                  })}
-                </View>
-              )}
-            </View>
+            {renderMessages}
             <View width={"100%"} mt={"10px"}>
               <View
                 style={{ borderWidth: 2 }}
@@ -287,13 +302,14 @@ const HomeScreen = () => {
                 </View>
 
                 <View width={"15%"}>
-                  <Pressable onPress={onPressSend}>
-                    <IonIcon
-                      style={{ marginLeft: "auto" }}
-                      name={"send"}
-                      size={25}
-                    />
-                  </Pressable>
+                  <Button
+                    variant={"unstyled"}
+                    isLoading={msgLoading}
+                    onPress={onPressSend}
+                    _text={{ color: "black" }}
+                  >
+                    Send
+                  </Button>
                 </View>
               </View>
             </View>
