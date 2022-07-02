@@ -7,6 +7,7 @@ const deso = new Deso();
 interface Context {
   loggedIn: boolean;
   deso: Deso;
+  publicKey: string;
 }
 
 const AppContext = React.createContext<Context | null>(null);
@@ -30,18 +31,18 @@ export const AppContextProvider = ({
   useEffect(() => {
     setLoading(true);
     const func = async () => {
+      console.log(deso.reinitialize(), "init");
+
       const loggedUser = deso.identity.getUserKey();
       if (!loggedUser) return;
-      const req = {
-        PublicKeyBase58Check: loggedUser,
-      };
       setLoggedIn(true);
+      setUserPublicKey(loggedUser);
     };
     func();
     setLoading(false);
-    window.deso = deso;
+    (window as any).deso = deso;
   }, []);
-  const value = { loggedIn, deso };
+  const value = { loggedIn, deso, publicKey: userPublicKey };
   return (
     <AppContext.Provider value={value}>
       {loading ? <div>Loading...</div> : children}

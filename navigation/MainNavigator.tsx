@@ -13,6 +13,8 @@ import {
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
 import { ActivityIndicator } from "react-native";
+import Landing from "../Screens/Landing";
+import { DesoProvider } from "../context/desoContext";
 
 const Stack = createNativeStackNavigator();
 const Login = () => {
@@ -22,6 +24,15 @@ const Login = () => {
     </View>
   );
 };
+
+const HomeWrapper = () => {
+  return (
+    <DesoProvider>
+      <HomeScreen />
+    </DesoProvider>
+  );
+};
+
 const MainNavigator = () => {
   const [loaded] = useFonts({
     Poppins_300Light,
@@ -54,9 +65,9 @@ const MainNavigator = () => {
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {appContext.loggedIn ? (
-          <Stack.Screen component={Login} name={"LoginUp"} />
+          <Stack.Screen component={HomeWrapper} name={"Auth"} />
         ) : (
-          <Stack.Screen component={HomeScreen} name={"Home"} />
+          <Stack.Screen component={Landing} name={"Home"} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

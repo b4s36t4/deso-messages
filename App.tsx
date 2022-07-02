@@ -32,11 +32,13 @@ export const theme: Theme = extendTheme({
     Text: {
       defaultProps: {
         color: "white",
+        fontFamiliy: "Poppins_500Normal",
       },
     },
     Heading: {
       defaultProps: {
         color: "white",
+        fontFamiliy: "Poppins_700Bold",
       },
     },
   },
