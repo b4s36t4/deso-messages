@@ -10,8 +10,14 @@ import {
 import React from "react";
 import Deso from "../assets/deso.svg";
 import PrimaryButton from "../components/PrimaryButton";
+import { useAppContext } from "../context/appContext";
 
 const HomeScreen = () => {
+  const { deso } = useAppContext();
+  const SignUpUser = async () => {
+    const res = await deso.identity.login("4");
+    console.log(res);
+  };
   return (
     <View flexDirection={"row"} width={"100%"} bg={"white"} height={"100%"}>
       <View backgroundColor={"primary.100"} color={"white"} width={"50%"}>
@@ -36,7 +42,11 @@ const HomeScreen = () => {
       </View>
       <View width={"50%"} key={"main"}>
         <View justifyContent={"center"} alignItems={"center"} flex={1}>
-          <PrimaryButton title="Start your Journey" style={{ width: "60%" }} />
+          <PrimaryButton
+            onPress={SignUpUser}
+            title="Start your Journey"
+            style={{ width: "60%" }}
+          />
         </View>
       </View>
     </View>

@@ -53,10 +53,11 @@ const MainNavigator = () => {
       }}
     >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!appContext.loggedIn ?? (
+        {appContext.loggedIn ? (
           <Stack.Screen component={Login} name={"LoginUp"} />
+        ) : (
+          <Stack.Screen component={HomeScreen} name={"Home"} />
         )}
-        <Stack.Screen component={HomeScreen} name={"Home"} />
       </Stack.Navigator>
     </NavigationContainer>
   );

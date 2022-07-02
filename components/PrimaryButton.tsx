@@ -6,22 +6,25 @@ import AntIcon from "@expo/vector-icons/AntDesign";
 interface ButtonProps {
   title: string;
   style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
 }
 
 const PrimaryButton: React.FC<ButtonProps> = ({
   title,
   style,
+  onPress,
   ...props
 }: ButtonProps) => {
   return (
     <Button
+      onPress={onPress}
       style={[
         {
           paddingVertical: "15px",
           paddingHorizontal: "10px",
           marginHorizontal: "auto",
           maxWidth: "80%",
-          width:"60%",
+          width: "60%",
         },
         style,
       ]}
