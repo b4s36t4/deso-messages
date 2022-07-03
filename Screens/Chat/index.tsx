@@ -15,6 +15,7 @@ import IonIconComponents from "@expo/vector-icons/Ionicons";
 import { useDeso } from "../../context/desoContext";
 import { useAppContext } from "../../context/appContext";
 import { useNavigation } from "@react-navigation/native";
+import WebView from "react-native-webview";
 const IonIcon = IonIconComponents as any;
 const Ant = AntIcon as any;
 interface Props {
@@ -31,6 +32,7 @@ const Chat = (props: any) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [msgLoading, setMsgLoading] = useState(false);
   const { sendMessage, getUserMessages, getMessagesFromAPI } = useDeso();
+  const [loadWebView, setLoadWebView] = useState(true);
 
   const onPressSend = async () => {
     if (msgLoading) return;
@@ -40,22 +42,20 @@ const Chat = (props: any) => {
     setMsgLoading(false);
   };
 
-  const decryptMessages = (messages) => {};
-
-  useEffect(() => {
-    if (!openedUser) return;
-    const func = async () => {
-      const res = await getMessagesFromAPI();
-      const userMessages = res?.OrderedContactsWithMessages[0]["Messages"];
-      const decrypted = await deso.identity.decrypt(userMessages);
-      //   if (!decrypted) return;
-      console.log(userMessages[0]);
-      setMessages(userMessages);
-    };
-    setInterval(() => {
-      func();
-    }, 1000);
-  }, [openedUser]);
+  //   useEffect(() => {
+  //     if (!openedUser) return;
+  //     const func = async () => {
+  //       const res = await getMessagesFromAPI();
+  //       const userMessages = res?.OrderedContactsWithMessages[0]["Messages"];
+  //       //   const decrypted = await deso.identity.decrypt(userMessages);
+  //       //   if (!decrypted) return;
+  //     //   setMessages(userMessages);
+  //     };
+  //     func();
+  //     // setInterval(() => {
+  //     //   func();
+  //     // }, 1000);
+  //   }, [openedUser]);
 
   const renderMessages = useMemo(() => {
     return (
@@ -108,6 +108,20 @@ const Chat = (props: any) => {
       </View>
     );
   }, [messages]);
+
+  const temp = `
+  var script = document.createElement("script");
+script.setAttribute("type", "text/javascript");
+script.setAttribute("src", "https://cdn.jsdelivr.net/npm/deso-protocol");
+document.getElementsByTagName("head")[0].appendChild(script);
+    
+  `;
+
+  if (loadWebView) {
+    console.log("llading");
+    return <WebView source={{ uri: "google.com" }} injectedJavaScript={temp} />;
+  }
+
   return (
     <View>
       {openedUser ? (

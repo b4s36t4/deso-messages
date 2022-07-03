@@ -12,7 +12,7 @@ import {
 import React, { memo, useEffect, useMemo, useState } from "react";
 import AntIcon from "@expo/vector-icons/AntDesign";
 import { useDeso } from "../../context/desoContext";
-import { Feather } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
 import {
   GetProfilesResponse,
   ProfileEntryResponse,
@@ -21,11 +21,7 @@ import { ActivityIndicator } from "react-native";
 import { User } from "../../components/UserCard";
 import UserAvatar from "../../components/UserAvatar";
 import IonIconComponents from "@expo/vector-icons/Ionicons";
-<<<<<<< HEAD:Screens/HomeScreen/index.web.tsx
 import { useAppContext } from "../../context/appContext";
-=======
-import { useAppContext } from "../context/appContext";
->>>>>>> df33baa66fa75c90cd3e7dccc1511b147c976de4:Screens/HomeScreen.tsx
 
 const IonIcon = IonIconComponents as any;
 const Ant = AntIcon as any;
@@ -87,6 +83,11 @@ const HomeScreen = () => {
       func();
     }, 1000);
   }, [openedUser]);
+
+  const logoutUser = async () => {
+    await deso.identity.logout(publicKey);
+    window.location.pathname = "/";
+  };
 
   const renderMessages = useMemo(() => {
     return (
@@ -192,9 +193,16 @@ const HomeScreen = () => {
             />
           )}
         </View>
+        <Ant
+          onPress={logoutUser}
+          name="logout"
+          size={30}
+          color={"white"}
+          style={{ marginLeft: "20px" }}
+        />
         <ScrollView
           style={{
-            marginTop: 50,
+            marginTop: 40,
             paddingHorizontal: 20,
             maxHeight: 800,
             overflow: "scroll",
@@ -202,7 +210,7 @@ const HomeScreen = () => {
           }}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          >
+        >
           {isLoading && (
             <ActivityIndicator
               color={"white"}
@@ -311,8 +319,12 @@ const HomeScreen = () => {
                     variant={"unstyled"}
                     isLoading={msgLoading}
                     onPress={onPressSend}
-                    style={{"marginLeft":"auto"}}
-                    _text={{ color: "primary.200",fontSize:"lg", fontFamily:"POPPINS_500MEDIUM" }}
+                    style={{ marginLeft: "auto" }}
+                    _text={{
+                      color: "primary.200",
+                      fontSize: "lg",
+                      fontFamily: "POPPINS_500MEDIUM",
+                    }}
                   >
                     Send
                   </Button>

@@ -127,7 +127,6 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
       "https://node.deso.org/api/v0/get-messages-stateless",
       params
     );
-    console.log(req.data);
     return req.data;
   };
 

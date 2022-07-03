@@ -28,9 +28,11 @@ const HomeScreen = () => {
         undefined,
         "toolbar=no, width=800, height=1000, top=0, left=0"
       );
+      return;
     } else {
       setItem("HasPhoneNumber", "true");
     }
+    window.location.reload();
   };
   return (
     <View flexDirection={"row"} width={"100%"} bg={"white"} height={"100%"}>
