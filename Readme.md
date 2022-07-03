@@ -2,6 +2,9 @@
 
 A Decentralized P2P chat application with Blockchain using React Native & NativeBase.
 
+### Architecture
+![image](https://user-images.githubusercontent.com/57614947/177027054-e9e280d5-c448-45bc-be45-ce139adfff4f.png)
+
 
 ## DeSo [The Decentralized Social Blockchain]
 
