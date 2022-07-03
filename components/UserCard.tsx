@@ -15,7 +15,7 @@ export const User = ({ displayName, verified, onPress }: Props) => {
     <Pressable
       onPress={onPress}
       style={{
-        paddingVertical: "10px",
+        paddingVertical: 10,
         paddingHorizontal: 10,
         alignItems: "center",
         flexDirection: "row",
@@ -28,11 +28,10 @@ export const User = ({ displayName, verified, onPress }: Props) => {
       <View alignItems={"center"} flexDirection={"row"}>
         <Text
           fontSize={"20"}
-          fontFamily={"POPPINS_600SEMIBOLD"}
           fontWeight={"semibold"}
           color={"black"}
-          ml={"10px"}
-          maxWidth={"100px"}
+          ml={10}
+          maxWidth={100}
           accessibilityLabel={displayName}
           accessibilityHint={displayName}
           ellipsizeMode={"tail"}

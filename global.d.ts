@@ -2,8 +2,8 @@ import { GetDecryptMessagesResponse } from "deso-protocol-types/src/lib/deso-typ
 
 declare module "*.svg" {
   export default string;
+}
 
-  export interface DecryptedMessage extends GetDecryptMessagesResponse {
-    DecryptedMessage: string;
-  }
+declare interface DecryptedMessage extends GetDecryptMessagesResponse {
+  DecryptedMessage: string;
 }

@@ -1,20 +1,15 @@
-import Deso, { DesoConfig } from "deso-protocol";
+import { createNavigationContainerRef } from "@react-navigation/native";
+import Deso from "deso-protocol";
+import { Text, View } from "native-base";
 import React, { useEffect, useState } from "react";
-import { IS_LOGGED_IN } from "../const";
-import { getBooleanItem } from "../utils/storage";
+import { getStringItem } from "../../utils/storage";
 
-const deso = new Deso();
-
-declare global {
-  interface Window {
-    deso: Deso;
-  }
-}
-
+// const deso = new Deso();
 interface Context {
   loggedIn: boolean;
   deso: Deso;
   publicKey: string;
+  navigationRef: any;
 }
 
 const AppContext = React.createContext<Context | null>(null);
@@ -35,24 +30,38 @@ export const AppContextProvider = ({
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userPublicKey, setUserPublicKey] = useState("");
+  const [jwt, setJwt] = useState("");
+  const navigationRef = createNavigationContainerRef();
   useEffect(() => {
     setLoading(true);
     const func = async () => {
-      console.log(deso.reinitialize(), "init");
-
-      const loggedUser = deso.identity.getUserKey();
-      if (!loggedUser) return;
+      const jwt = await getStringItem("jwt");
+      const publicKey = await getStringItem("publicKeyBase58Check");
+      if (!publicKey || !jwt) return;
+      setUserPublicKey(publicKey);
+      setJwt(jwt);
       setLoggedIn(true);
-      setUserPublicKey(loggedUser);
     };
     func();
     setLoading(false);
-    (window as any).deso = deso;
   }, []);
-  const value = { loggedIn, deso, publicKey: userPublicKey };
+  const deso = new Deso({ identityConfig: { host: "server" } });
+  const value = {
+    loggedIn,
+    publicKey: userPublicKey,
+    deso,
+    navigationRef,
+    jwt,
+  };
   return (
     <AppContext.Provider value={value}>
-      {loading ? <div>Loading...</div> : children}
+      {loading ? (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      ) : (
+        children
+      )}
     </AppContext.Provider>
   );
 };

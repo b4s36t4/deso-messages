@@ -8,12 +8,16 @@ import {
   extendTheme,
   Theme,
   View,
+  StatusBar,
 } from "native-base";
 import { AppContextProvider } from "./context/appContext";
 import MainNavigator from "./navigation/MainNavigator";
+import { getStringItem, setItem, storage } from "./utils/storage";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 // Define the config
 
 // extend the theme
+
 export const theme: Theme = extendTheme({
   colors: {
     primary: {
@@ -50,9 +54,12 @@ declare module "native-base" {
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-      <AppContextProvider>
-        <MainNavigator />
-      </AppContextProvider>
+      <SafeAreaProvider>
+        <StatusBar barStyle={"default"} />
+        <AppContextProvider>
+          <MainNavigator />
+        </AppContextProvider>
+      </SafeAreaProvider>
     </NativeBaseProvider>
   );
 }

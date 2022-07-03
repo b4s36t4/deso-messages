@@ -5,8 +5,10 @@ import {
   GetFollowsResponse,
   GetProfilesResponse,
   GetNotificationsCountResponse,
+  ProfileEntryResponse,
 } from "deso-protocol-types/src/lib/deso-types";
 import { GetDecryptMessagesResponse } from "deso-protocol-types/src/lib/deso-types-custom";
+import axios from "axios";
 interface Context {
   getAUser: (username: string) => Promise<GetSingleProfileResponse>;
   getMyFollowers: () => Promise<GetFollowsResponse>;
@@ -16,12 +18,16 @@ interface Context {
   searchUsers: (usernane: string) => Promise<GetProfilesResponse>;
   loading: boolean;
   getNotificationCount: () => Promise<GetNotificationsCountResponse>;
+  openedUser: ProfileEntryResponse;
+  setOpenedUser: (user: ProfileEntryResponse) => void;
+  getMessagesFromAPI: () => Promise<any>;
 }
 const DesoContext = React.createContext<Context | null>(null);
 
 export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
   const { deso, publicKey: currentUser } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [openedUser, setOpenedUser] = useState<any>("");
   const toggleLoading = () => {
     setLoading(!loading);
   };
@@ -106,6 +112,25 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
     return res;
   };
 
+  const getMessagesFromAPI = async () => {
+    const params = {
+      NumToFetch: 25,
+      PublicKeyBase58Check: currentUser,
+      FetchAfterPublicKeyBase58Check: "",
+      HoldersOnly: false,
+      FollowersOnly: false,
+      FollowingOnly: false,
+      HoldingsOnly: false,
+      SortAlgorithm: "time",
+    };
+    const req = await axios.post(
+      "https://node.deso.org/api/v0/get-messages-stateless",
+      params
+    );
+    console.log(req.data);
+    return req.data;
+  };
+
   const searchUsers = async (username: string) => {
     toggleLoading();
     const res = await deso.user.getProfiles({
@@ -132,6 +157,9 @@ export const DesoProvider = ({ children }: { children: React.ReactNode }) => {
     searchUsers,
     loading,
     getNotificationCount,
+    openedUser,
+    setOpenedUser,
+    getMessagesFromAPI,
   };
 
   return <DesoContext.Provider value={value}>{children}</DesoContext.Provider>;

@@ -1,22 +1,13 @@
-import { MMKV } from "react-native-mmkv";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const storage = new MMKV({ encryptionKey: "some_key_frwasda", id: "1" });
+export const storage = AsyncStorage;
 
-const getStringItem = async (key: string) => {
-  return await storage.getString(key);
+const getStringItem = (key: string) => {
+  return storage.getItem(key) || "";
 };
 
-const getBooleanItem = async (key: string) => {
-  return await storage.getBoolean(key);
+const setItem = (key: string, value: any) => {
+  storage.setItem(key, value);
 };
 
-const getNumber = async (key: string) => {
-  return await storage.getNumber(key);
-};
-
-const setItem = async (key: string, value: any) => {
-  storage.set(key, value);
-  return null;
-};
-
-export { getStringItem, getBooleanItem, getNumber, setItem };
+export { getStringItem, setItem };

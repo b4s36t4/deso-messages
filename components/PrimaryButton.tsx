@@ -20,8 +20,8 @@ const PrimaryButton: React.FC<ButtonProps> = ({
       onPress={onPress}
       style={[
         {
-          paddingVertical: "15px",
-          paddingHorizontal: "10px",
+          paddingVertical: 15,
+          paddingHorizontal: 10,
           marginHorizontal: "auto",
           maxWidth: "80%",
           width: "60%",

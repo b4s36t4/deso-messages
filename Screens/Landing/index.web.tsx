@@ -8,9 +8,10 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect } from "react";
-import Deso from "../assets/deso.svg";
-import PrimaryButton from "../components/PrimaryButton";
-import { useAppContext } from "../context/appContext";
+import Deso from "../../assets/deso.svg";
+import PrimaryButton from "../../components/PrimaryButton";
+import { useAppContext } from "../../context/appContext";
+import { setItem } from "../../utils/storage";
 
 const HomeScreen = () => {
   const { deso } = useAppContext();
@@ -28,7 +29,7 @@ const HomeScreen = () => {
         "toolbar=no, width=800, height=1000, top=0, left=0"
       );
     } else {
-      window.localStorage.setItem("HasPhoneNumber", "true");
+      setItem("HasPhoneNumber", "true");
     }
   };
   return (

@@ -11,18 +11,16 @@ import {
 } from "native-base";
 import React, { memo, useEffect, useMemo, useState } from "react";
 import AntIcon from "@expo/vector-icons/AntDesign";
-import { useDeso } from "../context/desoContext";
+import { useDeso } from "../../context/desoContext";
 import {
   GetProfilesResponse,
   ProfileEntryResponse,
 } from "deso-protocol-types/src/lib/deso-types";
 import { ActivityIndicator } from "react-native";
-import { User } from "../components/UserCard";
-import UserAvatar from "../components/UserAvatar";
+import { User } from "../../components/UserCard";
+import UserAvatar from "../../components/UserAvatar";
 import IonIconComponents from "@expo/vector-icons/Ionicons";
-import { useAppContext } from "../context/appContext";
-import { GetDecryptMessagesResponse } from "deso-protocol-types/src/lib/deso-types-custom";
-import { DecryptedMessage } from "../global";
+import { useAppContext } from "../../context/appContext";
 
 const IonIcon = IonIconComponents as any;
 const Ant = AntIcon as any;
@@ -55,9 +53,6 @@ const HomeScreen = () => {
   };
   useEffect(() => {
     handleSearch();
-    const req = {
-      PublicKeyBase58Check: publicKey,
-    };
   }, []);
 
   const onPressSend = async () => {
@@ -78,9 +73,10 @@ const HomeScreen = () => {
       const userMessages = await getUserMessages(
         openedUser.PublicKeyBase58Check
       );
-      const decrypted = await deso.identity.decrypt(userMessages);
-      if (!decrypted) return;
-      setMessages(decrypted);
+      // const decrypted = await deso.identity.decrypt(userMessages);
+
+      // if (!decrypted) return;
+      setMessages(userMessages);
     };
     setInterval(() => {
       func();
