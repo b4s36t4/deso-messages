@@ -12,6 +12,7 @@ import {
 import React, { memo, useEffect, useMemo, useState } from "react";
 import AntIcon from "@expo/vector-icons/AntDesign";
 import { useDeso } from "../../context/desoContext";
+import { Feather } from '@expo/vector-icons';
 import {
   GetProfilesResponse,
   ProfileEntryResponse,
@@ -20,7 +21,11 @@ import { ActivityIndicator } from "react-native";
 import { User } from "../../components/UserCard";
 import UserAvatar from "../../components/UserAvatar";
 import IonIconComponents from "@expo/vector-icons/Ionicons";
+<<<<<<< HEAD:Screens/HomeScreen/index.web.tsx
 import { useAppContext } from "../../context/appContext";
+=======
+import { useAppContext } from "../context/appContext";
+>>>>>>> df33baa66fa75c90cd3e7dccc1511b147c976de4:Screens/HomeScreen.tsx
 
 const IonIcon = IonIconComponents as any;
 const Ant = AntIcon as any;
@@ -103,6 +108,8 @@ const HomeScreen = () => {
             // justifyContent={"flex-end"}
             overflow={"scroll"}
             contentContainerStyle={{ justifyContent: "flex-end" }}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           >
             {messages.map((message) => {
               return (
@@ -185,7 +192,7 @@ const HomeScreen = () => {
             />
           )}
         </View>
-        <View
+        <ScrollView
           style={{
             marginTop: 50,
             paddingHorizontal: 20,
@@ -193,7 +200,9 @@ const HomeScreen = () => {
             overflow: "scroll",
             paddingBottom: 120,
           }}
-        >
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          >
           {isLoading && (
             <ActivityIndicator
               color={"white"}
@@ -218,7 +227,7 @@ const HomeScreen = () => {
                 ))}
               </>
             )}
-        </View>
+        </ScrollView>
       </View>
       <View key={"right"} width={"70%"} height={"100%"} px={"2rem"} py={"1rem"}>
         {openedUser ? (
@@ -302,7 +311,8 @@ const HomeScreen = () => {
                     variant={"unstyled"}
                     isLoading={msgLoading}
                     onPress={onPressSend}
-                    _text={{ color: "black" }}
+                    style={{"marginLeft":"auto"}}
+                    _text={{ color: "primary.200",fontSize:"lg", fontFamily:"POPPINS_500MEDIUM" }}
                   >
                     Send
                   </Button>
