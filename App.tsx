@@ -7,12 +7,10 @@ import {
   NativeBaseProvider,
   extendTheme,
   Theme,
-  View,
   StatusBar,
 } from "native-base";
 import { AppContextProvider } from "./context/appContext";
 import MainNavigator from "./navigation/MainNavigator";
-import { getStringItem, setItem, storage } from "./utils/storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 // Define the config
 
@@ -61,23 +59,5 @@ export default function App() {
         </AppContextProvider>
       </SafeAreaProvider>
     </NativeBaseProvider>
-  );
-}
-
-// Color Switch Component
-function ToggleDarkMode() {
-  const { colorMode, toggleColorMode } = useColorMode();
-  return (
-    <HStack space={2} alignItems="center">
-      <Text>Dark</Text>
-      <Switch
-        isChecked={colorMode === "light"}
-        onToggle={toggleColorMode}
-        aria-label={
-          colorMode === "light" ? "switch to dark mode" : "switch to light mode"
-        }
-      />
-      <Text>Light</Text>
-    </HStack>
   );
 }

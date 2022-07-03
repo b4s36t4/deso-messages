@@ -30,7 +30,7 @@ const HomeScreen = () => {
     return (
       <WebView
         source={{
-          uri: "https://identity.deso.org/derive?accessLevelRequest=4&callback=exp://192.168.2.154:19000",
+          uri: `https://identity.deso.org/derive?accessLevelRequest=4&callback=${process.env.REACT_APP_DEEP_LINK_CALLBACK}`,
         }}
         javaScriptEnabled={true}
         domStorageEnabled={true}
