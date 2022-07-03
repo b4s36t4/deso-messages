@@ -11,6 +11,7 @@ import {
 } from "native-base";
 import React, { memo, useEffect, useMemo, useState } from "react";
 import AntIcon from "@expo/vector-icons/AntDesign";
+import { Feather } from '@expo/vector-icons';
 import { useDeso } from "../context/desoContext";
 import {
   GetProfilesResponse,
@@ -21,8 +22,6 @@ import { User } from "../components/UserCard";
 import UserAvatar from "../components/UserAvatar";
 import IonIconComponents from "@expo/vector-icons/Ionicons";
 import { useAppContext } from "../context/appContext";
-import { GetDecryptMessagesResponse } from "deso-protocol-types/src/lib/deso-types-custom";
-import { DecryptedMessage } from "../global";
 
 const IonIcon = IonIconComponents as any;
 const Ant = AntIcon as any;
@@ -107,6 +106,8 @@ const HomeScreen = () => {
             // justifyContent={"flex-end"}
             overflow={"scroll"}
             contentContainerStyle={{ justifyContent: "flex-end" }}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
           >
             {messages.map((message) => {
               return (
@@ -189,7 +190,7 @@ const HomeScreen = () => {
             />
           )}
         </View>
-        <View
+        <ScrollView
           style={{
             marginTop: 50,
             paddingHorizontal: 20,
@@ -197,7 +198,9 @@ const HomeScreen = () => {
             overflow: "scroll",
             paddingBottom: 120,
           }}
-        >
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          >
           {isLoading && (
             <ActivityIndicator
               color={"white"}
@@ -222,7 +225,7 @@ const HomeScreen = () => {
                 ))}
               </>
             )}
-        </View>
+        </ScrollView>
       </View>
       <View key={"right"} width={"70%"} height={"100%"} px={"2rem"} py={"1rem"}>
         {openedUser ? (
@@ -306,7 +309,8 @@ const HomeScreen = () => {
                     variant={"unstyled"}
                     isLoading={msgLoading}
                     onPress={onPressSend}
-                    _text={{ color: "black" }}
+                    style={{"marginLeft":"auto"}}
+                    _text={{ color: "primary.200",fontSize:"lg", fontFamily:"POPPINS_500MEDIUM" }}
                   >
                     Send
                   </Button>
